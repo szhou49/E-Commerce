@@ -1,6 +1,6 @@
 package com.example.user.controller;
 
-import java.util.Optional;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -17,23 +17,35 @@ public class UserController {
 
     // Register a new user
     @PostMapping("/register")
-    public ResponseEntity<?> registerUser(@RequestBody User user) {
+    public ResponseEntity<?> registerUser(@RequestBody Map<String, String> request) {
         try {
-            User createdUser = userService.createUser(user);
-            return ResponseEntity.ok(createdUser);
+            String name = request.get("name");
+            String email = request.get("email");
+            String password = request.get("password");
+
+            User user = new User();
+            user.setName(name);
+            user.setEmail(email);
+            user.setPassword(password);
+
+            User registeredUser = userService.registerUser(user);
+            return ResponseEntity.ok(registeredUser);
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
 
-    // Get user details by email
-    @GetMapping("/{email}")
-    public ResponseEntity<?> getUserByEmail(@PathVariable String email) {
-        Optional<User> user = userService.findUserByEmail(email);
-        if (user.isPresent()) {
-            return ResponseEntity.ok(user.get());
-        } else {
-            return ResponseEntity.notFound().build();
+    @PostMapping("/login")
+    public ResponseEntity<?> loginUser(@RequestBody Map<String, String> request) {
+        try {
+            String email = request.get("email");
+            String password = request.get("password");
+
+            String token = userService.loginUser(email, password);
+
+            return ResponseEntity.ok(Map.of("token", token));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(Map.of("error", e.getMessage()));
         }
     }
 }
