@@ -32,6 +32,12 @@ public class ProductController {
         }
     }
     
+    @GetMapping("/{id}/exists")
+    public ResponseEntity<Boolean> doesProductExist(@PathVariable Long id) {
+        boolean exists = productService.productExistsById(id);
+        return ResponseEntity.ok(exists);
+    }
+    
     @PostMapping
     public ResponseEntity<Product> createProduct(@Valid @RequestBody Product product) {
         Product createdProduct = productService.createProduct(product);

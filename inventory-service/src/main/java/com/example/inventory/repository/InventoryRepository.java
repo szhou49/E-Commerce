@@ -7,5 +7,5 @@ import com.example.inventory.model.Inventory;
 
 @Repository
 public interface InventoryRepository extends JpaRepository<Inventory, Long> {
-    Inventory findByProductName(String productName);
+    Inventory findByProductId(Long productId);
 }

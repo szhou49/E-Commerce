@@ -1,6 +1,7 @@
 package com.example.inventory.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Min;
 
 @Entity
 @Table(name = "inventory")
@@ -9,7 +10,11 @@ public class Inventory {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String productName;
+    @Column(nullable = false, unique = true)
+    private Long productId;
+
+    @Min(value = 0, message = "Stock cannot be negative.")
+    @Column(nullable = false)
     private int stock;
 
     public Long getId() {
@@ -18,11 +23,11 @@ public class Inventory {
     public void setId(Long id) {
         this.id = id;
     }
-    public String getProductName() {
-        return productName;
+    public Long getProductId() {
+        return productId;
     }
-    public void setProductName(String productName) {
-        this.productName = productName;
+    public void setProductId(Long productId) {
+        this.productId = productId;
     }
     public int getStock() {
         return stock;

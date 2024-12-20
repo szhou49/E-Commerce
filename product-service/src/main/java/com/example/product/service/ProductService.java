@@ -45,4 +45,8 @@ public class ProductService {
                 })
                 .orElseThrow(() -> new RuntimeException("Product with ID " + id + " does not exist."));
     }
+
+    public boolean productExistsById(Long id) {
+        return productRepository.existsById(id);
+    }
 }
